@@ -13,6 +13,8 @@
 .edu-row p{font-size:12px}
 .contact-top,.footer-line{font-size:11px}
 .contact-links a{font-size:14px}
+.contact h2{font-size:clamp(68px,10.5vw,190px)}
+.contact-action{margin-left:58%;margin-bottom:24px}.contact-action h3{font-family:Georgia,serif;font-size:clamp(22px,2vw,34px);font-weight:400;margin:0 0 8px}.contact-action p{font-size:11px;letter-spacing:.14em;margin:0;color:#aaa}
 .resolve-gallery figcaption{font-size:10px}
 .skills .section-head h2{font-size:clamp(48px,7.4vw,132px);overflow-wrap:anywhere}
 .section-head.title-only{grid-template-columns:29% 1fr}.section-head.title-only h2{grid-column:2}.contact-top-clean{justify-content:flex-end}
@@ -30,3 +32,4 @@
 @media(max-width:600px){.flux-gallery{min-height:150vw;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4%;scrollbar-width:thin}.flux-gallery figure,.flux-gallery .flux-main{flex:0 0 76vw;scroll-snap-align:center}.flux-gallery img{object-fit:contain}}
 @media(max-width:600px){.smaar-gallery{min-height:150vw;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding:4%;scrollbar-width:thin}.smaar-gallery figure{flex:0 0 76vw;scroll-snap-align:center}.smaar-gallery img{object-fit:contain}}
 @media(max-width:600px){.project-visual.flux-gallery,.project-visual.smaar-gallery{min-height:150vw}.project-visual.resolve-gallery{min-height:120vw}.project-info h3{font-size:18vw}.project{margin-bottom:100px}}
+@media(max-width:900px){.contact-action{margin-left:0}}
