@@ -1,0 +1,2 @@
+import SectionHeader from '../components/SectionHeader';import {portfolio} from '../data/portfolio';
+export default function Skills(){return <section id="stack" className="section skills"><SectionHeader title={<>COMPETÊNCIAS</>}/><div className="skill-list">{portfolio.skills.map(g=><div className="skill-row" key={g.title} data-reveal><h3>{g.title}</h3><p>{g.items.join(' / ')}</p></div>)}</div></section>}

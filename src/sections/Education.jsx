@@ -1,0 +1,2 @@
+import SectionHeader from '../components/SectionHeader';
+export default function Education(){return <section id="education" className="section education"><SectionHeader title={<>APRENDER<br/><i>FAZENDO.</i></>}/><div className="edu-row" data-reveal><div><small>FORMAÇÃO</small><h3>Instituto Federal<br/>Catarinense</h3><p>Campus Concórdia</p></div><div><small>ATUALMENTE</small><h3>Desenvolvimento<br/>Full Stack</h3><p>Estudante / Criador de projetos</p></div></div></section>}

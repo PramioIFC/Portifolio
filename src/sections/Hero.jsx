@@ -1,0 +1,3 @@
+import {ArrowDownRight} from 'lucide-react';
+import {portfolio} from '../data/portfolio';
+export default function Hero(){return <header id="top" className="hero"><div className="hero-photo" data-reveal><img src="/assets/joao-pramio.jpg" alt="João Vitor Pramio em um retrato diante do espelho"/><span>RETRATO / 2026</span></div><div className="hero-copy"><div className="hero-kicker"><span>DESENVOLVEDOR FULL STACK</span><span>IFC — CONCÓRDIA / SC</span></div><h1 data-reveal>JOÃO<br/><em>PRAMIO</em></h1><div className="hero-bottom"><p>{portfolio.intro}</p><a className="circle-link" href="#work" aria-label="Ver projetos"><ArrowDownRight/></a></div></div><div className="scroll-note">ROLE PARA EXPLORAR ↓</div></header>}
