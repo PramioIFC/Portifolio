@@ -1,19 +1,67 @@
+import {useEffect,useRef,useState} from 'react';
+
+const galleries={
+  flux:[
+    ['/assets/flux-inicio.png','Tela inicial do aplicativo Flux','INÍCIO E DESCOBERTA'],
+    ['/assets/flux-busca.png','Resultados da busca musical do Flux','BUSCA E CATÁLOGO'],
+    ['/assets/flux-player.png','Reprodutor musical do Flux','REPRODUÇÃO'],
+    ['/assets/flux-telas.png','Conjunto completo de telas do aplicativo Flux','EXPERIÊNCIA COMPLETA']
+  ],
+  smaar:[
+    ['/assets/smaar-porteiras.png','Lista de porteiras monitoradas pelo SMAAR','PORTEIRAS'],
+    ['/assets/smaar-controle.png','Controle da porteira principal no SMAAR','CONTROLE'],
+    ['/assets/smaar-historico.png','Histórico diário no SMAAR','HISTÓRICO'],
+    ['/assets/smaar-calendario.png','Calendário de eventos no SMAAR','CALENDÁRIO']
+  ],
+  resolvetech:[
+    ['/assets/resolvetech-formularios.jpg','Criação automática de formulários no ResolveTech','AUTOMAÇÃO DE FORMULÁRIOS'],
+    ['/assets/resolvetech-atendimento.jpg','Atendimento humano e por IA no ResolveTech','ATENDIMENTO HUMANO E IA'],
+    ['/assets/resolvetech-checklist.jpg','Checklist para revisão humana no ResolveTech','REVISÃO HUMANA'],
+    ['/assets/resolvetech-gerenciamento.jpg','Central de gerenciamento de demandas do ResolveTech','GESTÃO DE DEMANDAS']
+  ]
+};
+
 export default function ProjectVisual({project}){
-  if(project.slug==='flux')return <div className="project-visual flux-gallery" aria-label={project.imageAlt}>
-    <figure className="flux-main"><img src="/assets/flux-inicio.png" alt="Tela inicial do aplicativo Flux" loading="lazy"/><figcaption>01 — INÍCIO E DESCOBERTA</figcaption></figure>
-    <figure><img src="/assets/flux-busca.png" alt="Resultados da busca musical do Flux" loading="lazy"/><figcaption>02 — BUSCA E CATÁLOGO</figcaption></figure>
-    <figure><img src="/assets/flux-player.png" alt="Reprodutor musical do Flux" loading="lazy"/><figcaption>03 — REPRODUÇÃO</figcaption></figure>
-  </div>;
-  if(project.slug==='smaar')return <div className="project-visual smaar-gallery" aria-label={project.imageAlt}>
-    <figure><img src="/assets/smaar-porteiras.png" alt="Lista de porteiras monitoradas pelo SMAAR" loading="lazy"/><figcaption>01 — PORTEIRAS</figcaption></figure>
-    <figure><img src="/assets/smaar-controle.png" alt="Controle e estado da porteira principal no SMAAR" loading="lazy"/><figcaption>02 — CONTROLE</figcaption></figure>
-    <figure><img src="/assets/smaar-historico.png" alt="Histórico diário de abertura e fechamento no SMAAR" loading="lazy"/><figcaption>03 — HISTÓRICO</figcaption></figure>
-    <figure><img src="/assets/smaar-calendario.png" alt="Calendário de eventos das porteiras no SMAAR" loading="lazy"/><figcaption>04 — CALENDÁRIO</figcaption></figure>
-  </div>;
-  if(project.image)return <div className={'project-visual '+project.slug}><img src={project.image} alt={project.imageAlt} loading="lazy"/></div>;
-  return <div className="project-visual resolve-gallery" aria-label={project.imageAlt}>
-    <figure className="resolve-main"><img src="/assets/resolvetech-atendimento.jpg" alt="Atendimento assistido do ResolveTech com conversa entre cliente e IA" loading="lazy"/><figcaption>01 — ATENDIMENTO COM IA</figcaption></figure>
-    <figure><img src="/assets/resolvetech-checklist.jpg" alt="Formulário da demanda e checklist para geração de relatório" loading="lazy"/><figcaption>02 — REVISÃO HUMANA</figcaption></figure>
-    <figure><img src="/assets/resolvetech-formularios.jpg" alt="Criação automática de formulários a partir de um protocolo" loading="lazy"/><figcaption>03 — AUTOMAÇÃO DE FORMULÁRIOS</figcaption></figure>
-  </div>
+  const slides=galleries[project.slug];
+  const[open,setOpen]=useState(false);
+  const[index,setIndex]=useState(0);
+  const startX=useRef(null);
+  const move=direction=>setIndex(current=>(current+direction+slides.length)%slides.length);
+
+  useEffect(()=>{
+    if(!open)return;
+    document.body.classList.add('gallery-open');
+    const key=e=>{if(e.key==='Escape')setOpen(false);if(e.key==='ArrowLeft')move(-1);if(e.key==='ArrowRight')move(1)};
+    addEventListener('keydown',key);
+    return()=>{document.body.classList.remove('gallery-open');removeEventListener('keydown',key)};
+  },[open]);
+
+  const touchStart=e=>{startX.current=e.touches[0].clientX};
+  const touchEnd=e=>{
+    if(startX.current===null)return;
+    const distance=e.changedTouches[0].clientX-startX.current;
+    if(Math.abs(distance)>45)move(distance<0?1:-1);
+    startX.current=null;
+  };
+
+  return <>
+    <button className={`project-preview preview-${project.slug}`} type="button" onClick={()=>setOpen(true)} aria-label={`Ver imagens do projeto ${project.name}`}>
+      <img src={slides[0][0]} alt="" loading="lazy"/>
+      <span>VER PROJETO <b>↗</b></span>
+      <small>{String(slides.length).padStart(2,'0')} IMAGENS</small>
+    </button>
+    {open&&<div className={`gallery-modal modal-${project.slug}`} role="dialog" aria-modal="true" aria-label={`Galeria do projeto ${project.name}`} onMouseDown={e=>{if(e.target===e.currentTarget)setOpen(false)}}>
+      <div className="modal-panel">
+        <header><span>{project.name}</span><span>{String(index+1).padStart(2,'0')} / {String(slides.length).padStart(2,'0')}</span><button type="button" onClick={()=>setOpen(false)} aria-label="Fechar galeria">×</button></header>
+        <div className="modal-viewport" onTouchStart={touchStart} onTouchEnd={touchEnd}>
+          <div className="modal-track" style={{transform:`translateX(-${index*100}%)`}}>
+            {slides.map(([src,alt,caption])=><figure key={src}><img src={src} alt={alt}/><figcaption>{caption}</figcaption></figure>)}
+          </div>
+          <button className="modal-arrow previous" type="button" onClick={()=>move(-1)} aria-label="Imagem anterior">←</button>
+          <button className="modal-arrow next" type="button" onClick={()=>move(1)} aria-label="Próxima imagem">→</button>
+        </div>
+        <div className="modal-dots">{slides.map((slide,i)=><button key={slide[0]} className={i===index?'active':''} onClick={()=>setIndex(i)} aria-label={`Ver imagem ${i+1}`}/>)}</div>
+      </div>
+    </div>}
+  </>;
 }
